@@ -3,128 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EL IGUANO | Carrito</title>
+    <title>Catálogo | Mi Tienda Deportiva</title>
     <style>
-        body { background-color: #0d0d0d; color: #fff; font-family: 'Helvetica', sans-serif; margin: 0; padding-bottom: 80px; }
-        header { background: #000; padding: 20px; text-align: center; border-bottom: 2px solid #ff4500; }
+        :root { --naranja: #ff4500; --gris-oscuro: #1a1a1a; }
+        body { background-color: #0d0d0d; color: #fff; font-family: 'Helvetica', sans-serif; margin: 0; padding-bottom: 100px; }
+        header { background: #000; padding: 25px; text-align: center; border-bottom: 2px solid var(--naranja); }
         
-        /* Pestañas de categorías */
-        .categorias { display: flex; overflow-x: auto; background: #1a1a1a; padding: 10px; sticky; top: 0; z-index: 10; border-bottom: 1px solid #333; }
+        /* Pestañas */
+        .categorias { display: flex; overflow-x: auto; background: var(--gris-oscuro); padding: 10px; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid #333; }
         .tab-btn { background: none; border: none; color: #888; padding: 10px 20px; font-weight: bold; cursor: pointer; text-transform: uppercase; white-space: nowrap; }
-        .tab-btn.active { color: #ff4500; border-bottom: 2px solid #ff4500; }
+        .tab-btn.active { color: var(--naranja); border-bottom: 2px solid var(--naranja); }
 
+        /* Productos */
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; padding: 20px; }
         .seccion-productos { display: none; }
         .seccion-productos.active { display: grid; }
-
-        .card { background: #1a1a1a; border-radius: 8px; padding: 10px; border: 1px solid #333; }
-        .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 5px; }
-        .card h3 { font-size: 0.9rem; margin: 10px 0; }
-        .precio { color: #ff4500; font-weight: bold; display: block; margin-bottom: 10px; }
+        .card { background: var(--gris-oscuro); border-radius: 8px; padding: 10px; border: 1px solid #333; }
         
-        .btn-add { background: #fff; color: #000; border: none; padding: 8px; width: 100%; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.8rem; }
-        .btn-add:hover { background: #ff4500; color: #fff; }
+        /* Imagen con cursor de lupa */
+        .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 5px; cursor: zoom-in; transition: 0.3s; }
+        .card img:hover { opacity: 0.8; }
+        
+        .card h3 { font-size: 0.9rem; margin: 10px 0; height: 35px; overflow: hidden; }
+        select, .btn-add { width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: none; font-weight: bold; }
+        select { background: #333; color: #fff; margin-bottom: 10px; }
+        .btn-add { background: #fff; color: #000; cursor: pointer; }
+        .btn-add:hover { background: var(--naranja); color: #fff; }
 
-        /* Barra de Carrito Flotante */
-        .carrito-bar { position: fixed; bottom: 0; width: 100%; background: #ff4500; color: white; padding: 15px; display: flex; justify-content: space-around; align-items: center; font-weight: bold; cursor: pointer; z-index: 100; border-radius: 15px 15px 0 0; }
+        /* MODAL DE IMAGEN (LUPA) */
+        #modal-imagen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 300; justify-content: center; align-items: center; cursor: zoom-out; }
+        #img-expandida { max-width: 95%; max-height: 90%; border-radius: 5px; box-shadow: 0 0 20px rgba(255,69,0,0.5); }
+
+        /* Barra Inferior */
+        .carrito-bar { position: fixed; bottom: 0; width: 100%; background: var(--naranja); color: white; padding: 15px; display: flex; justify-content: space-around; align-items: center; font-weight: bold; cursor: pointer; z-index: 100; border-radius: 15px 15px 0 0; }
+
+        /* VENTANA DEL CARRITO */
+        #modal-carrito { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 200; overflow-y: auto; }
+        .modal-contenido { background: var(--gris-oscuro); margin: 10% auto; padding: 20px; width: 90%; max-width: 500px; border-radius: 10px; border: 1px solid var(--naranja); }
+        .item-carrito { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #333; }
+        .btn-cerrar { background: #444; color: white; padding: 10px; width: 100%; margin-top: 10px; border: none; border-radius: 5px; }
+        .btn-whatsapp { background: #25d366; color: white; padding: 15px; width: 100%; margin-top: 20px; border: none; border-radius: 5px; font-weight: bold; font-size: 1rem; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>EL IGUANO</h1>
+    <h1>MI TIENDA DEPORTIVA</h1>
 </header>
 
 <div class="categorias">
     <button class="tab-btn active" onclick="abrirTab(event, 'sudaderas')">Sudaderas</button>
     <button class="tab-btn" onclick="abrirTab(event, 'shorts')">Shorts</button>
-    <button class="tab-btn" onclick="abrirTab(event, 'licras')">Licras Dama</button>
-    <button class="tab-btn" onclick="abrirTab(event, 'playeras')">Playeras</button>
+    <button class="tab-btn" onclick="abrirTab(event, 'licras')">Licras</button>
 </div>
 
 <div id="sudaderas" class="seccion-productos active grid">
     <div class="card">
-        <img src="[url=https://postimg.cc/cvb5nKff][img]https://i.postimg.cc/cvb5nKff/Short.jpg[/img][/url]" alt="Sudadera">
+        <img src="URL_TU_FOTO" alt="Sudadera" onclick="verImagen(this.src)">
         <h3>Sudadera Pro-Fit</h3>
-        <span class="precio">$550</span>
-        <button class="btn-add" onclick="agregarAlCarrito('Sudadera Pro-Fit', 550)">Añadir al Carrito</button>
+        <select id="talla-s1"><option>Talla: CH</option><option>Talla: M</option><option>Talla: G</option></select>
+        <span style="color:var(--naranja);">$550</span>
+        <button class="btn-add" onclick="agregarAlCarrito('Sudadera Pro-Fit', 550, 'talla-s1')">Agregar</button>
     </div>
 </div>
 
-<div id="shorts" class="seccion-productos grid">
-    <div class="card">
-        <img src="https://i.postimg.cc/xdfrBMCp/Short.jpg" alt="Short">
-        <h3>Short Licra 2 en 1</h3>
-        <span class="precio">$380</span>
-        <button class="btn-add" onclick="agregarAlCarrito('Short Licra 2 en 1', 380)">Añadir al Carrito</button>
+<div id="modal-imagen" onclick="this.style.display='none'">
+    <img id="img-expandida" src="" alt="Vista Previa">
+</div>
+
+<div id="modal-carrito">
+    <div class="modal-contenido">
+        <h2>Tu Pedido</h2>
+        <div id="lista-carrito"></div>
+        <hr>
+        <h3 id="total-modal">Total: $0</h3>
+        <button class="btn-whatsapp" onclick="enviarWhatsApp()">REALIZAR COMPRA (WhatsApp)</button>
+        <button class="btn-cerrar" onclick="cerrarCarrito()">Seguir comprando</button>
     </div>
 </div>
 
-<div id="licras" class="seccion-productos grid">
-    <div class="card">
-        <img src="URL_IMAGEN" alt="Licra">
-        <h3>Licra Dama High</h3>
-        <span class="precio">$420</span>
-        <button class="btn-add" onclick="agregarAlCarrito('Licra Dama High', 420)">Añadir al Carrito</button>
-    </div>
-</div>
-
-<div id="playeras" class="seccion-productos grid">
-    <div class="card">
-        <img src="URL_IMAGEN" alt="Playera">
-        <h3>Playera Dri-Fit</h3>
-        <span class="precio">$290</span>
-        <button class="btn-add" onclick="agregarAlCarrito('Playera Dri-Fit', 290)">Añadir al Carrito</button>
-    </div>
-</div>
-
-<div class="carrito-bar" onclick="enviarWhatsApp()">
+<div class="carrito-bar" onclick="abrirCarrito()">
     <span id="cuenta-carrito">Items: 0</span>
-    <span>VER TOTAL Y PEDIR</span>
-    <span id="total-carrito">$0.00</span>
+    <span>REVISAR CARRITO</span>
+    <span id="total-bar">$0</span>
 </div>
 
 <script>
     let carrito = [];
     let total = 0;
 
-    function abrirTab(evt, categoria) {
-        let secciones = document.getElementsByClassName("seccion-productos");
-        for (let i = 0; i < secciones.length; i++) { secciones[i].style.display = "none"; }
-        let btns = document.getElementsByClassName("tab-btn");
-        for (let i = 0; i < btns.length; i++) { btns[i].classList.remove("active"); }
-        document.getElementById(categoria).style.display = "grid";
+    // Función para ver imagen en grande
+    function verImagen(url) {
+        document.getElementById("img-expandida").src = url;
+        document.getElementById("modal-imagen").style.display = "flex";
+    }
+
+    function abrirTab(evt, cat) {
+        let sec = document.getElementsByClassName("seccion-productos");
+        for (let i=0; i<sec.length; i++) sec[i].style.display = "none";
+        let btn = document.getElementsByClassName("tab-btn");
+        for (let i=0; i<btn.length; i++) btn[i].classList.remove("active");
+        document.getElementById(cat).style.display = "grid";
         evt.currentTarget.classList.add("active");
     }
 
-    function agregarAlCarrito(nombre, precio) {
-        carrito.push({nombre, precio});
+    function agregarAlCarrito(nombre, precio, idTalla) {
+        const talla = document.getElementById(idTalla).value;
+        carrito.push({nombre, precio, talla});
         total += precio;
+        actualizarBarra();
+        alert("¡Agregado!");
+    }
+
+    function actualizarBarra() {
         document.getElementById("cuenta-carrito").innerText = `Items: ${carrito.length}`;
-        document.getElementById("total-carrito").innerText = `$${total}`;
-        alert(nombre + " agregado al carrito");
+        document.getElementById("total-bar").innerText = `$${total}`;
+    }
+
+    function abrirCarrito() {
+        const lista = document.getElementById("lista-carrito");
+        lista.innerHTML = "";
+        carrito.forEach((item, index) => {
+            lista.innerHTML += `<div class="item-carrito">
+                <span>${item.nombre} (${item.talla})</span>
+                <span>$${item.precio}</span>
+            </div>`;
+        });
+        document.getElementById("total-modal").innerText = `Total: $${total}`;
+        document.getElementById("modal-carrito").style.display = "block";
+    }
+
+    function cerrarCarrito() {
+        document.getElementById("modal-carrito").style.display = "none";
     }
 
     function enviarWhatsApp() {
-        if (carrito.length === 0) {
-            alert("Tu carrito está vacío");
-            return;
-        }
-
-        const tel = "5214961228531"; // <--- CAMBIA TU NÚMERO AQUÍ
-        let lista = "¡Hola! Quisiera hacer un pedido:\n\n";
-        
-        carrito.forEach((item, index) => {
-            lista += `${index + 1}. ${item.nombre} - $${item.precio}\n`;
+        const tel = "521XXXXXXXXXX"; // <--- NO OLVIDES TU NÚMERO AQUÍ
+        let texto = "¡Hola! Quisiera realizar esta compra:\n\n";
+        carrito.forEach((item, i) => {
+            texto += `${i+1}. ${item.nombre} - ${item.talla} ($${item.precio})\n`;
         });
-
-        lista += `\n*Total a pagar: $${total}*`;
-        lista += "\n\n¿Me podrías proporcionar los datos para transferencia?";
-
-        const msj = encodeURIComponent(lista);
-        window.open(`https://wa.me/${tel}?text=${msj}`);
+        texto += `\n*TOTAL: $${total}*`;
+        window.open(`https://wa.me/${tel}?text=${encodeURIComponent(texto)}`);
     }
 </script>
-
 </body>
 </html>

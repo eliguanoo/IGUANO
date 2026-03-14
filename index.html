@@ -5,10 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo | Mi Tienda Deportiva</title>
     <style>
-        /* CONFIGURACIÓN DE COLORES */
         :root { 
-            --primario: #000000; /* Negro para detalles */
-            --fondo: #ffffff;    /* Blanco para el fondo */
+            --primario: #000000;
+            --fondo: #ffffff;
             --gris-claro: #f4f4f4; 
             --texto: #1a1a1a;
         }
@@ -32,18 +31,20 @@
         select, .btn-add { width: 100%; padding: 10px; margin-top: 5px; border-radius: 4px; border: 1px solid #ddd; font-weight: bold; }
         select { background: var(--gris-claro); color: #333; margin-bottom: 10px; }
         .btn-add { background: var(--primario); color: #fff; cursor: pointer; border: none; }
-        .btn-add:hover { opacity: 0.8; }
 
-        /* Lupa (Imagen expandida) */
+        /* Lupa */
         #modal-imagen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); z-index: 300; justify-content: center; align-items: center; }
-        #img-expandida { max-width: 95%; max-height: 90%; border-radius: 5px; border: 2px solid var(--primario); box-shadow: 0 0 20px rgba(0,0,0,0.2); }
+        #img-expandida { max-width: 95%; max-height: 90%; border-radius: 5px; border: 2px solid var(--primario); }
 
         /* Carrito */
         .carrito-bar { position: fixed; bottom: 0; width: 100%; background: var(--primario); color: white; padding: 15px; display: flex; justify-content: space-around; align-items: center; font-weight: bold; cursor: pointer; z-index: 100; border-radius: 15px 15px 0 0; }
         #modal-carrito { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 200; overflow-y: auto; }
         .modal-contenido { background: #fff; margin: 10% auto; padding: 20px; width: 90%; max-width: 450px; border-radius: 10px; color: #000; }
         
-        .item-carrito { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
+        /* Diseño del item en carrito con miniatura */
+        .item-carrito { display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; gap: 15px; }
+        .mini-foto { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; }
+        .info-item { flex-grow: 1; }
         .btn-eliminar { background: none; border: none; color: #ff4444; cursor: pointer; font-size: 1.2rem; }
         
         .btn-cerrar { background: #eee; color: #333; padding: 10px; width: 100%; margin-top: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
@@ -64,11 +65,11 @@
 
 <div id="sudaderas" class="seccion-productos active grid">
     <div class="card">
-        <img src="[url=https://postimg.cc/sBGH9VJH][img]https://i.postimg.cc/sBGH9VJH/sudadera-1.jpg[/img][/url]" onclick="verImagen(this.src)">
+        <img id="img-prod1" src="[url=https://postimg.cc/sBGH9VJH][img]https://i.postimg.cc/sBGH9VJH/sudadera-1.jpg[/img][/url]" onclick="verImagen(this.src)">
         <h3>Sudadera Pro-Fit</h3>
         <select id="t-s1"><option>Talla: CH</option><option>Talla: M</option><option>Talla: G</option></select>
         <span style="color:var(--primario); font-weight: bold; display: block; margin-bottom: 5px;">$550</span>
-        <button class="btn-add" onclick="agregarAlCarrito('Sudadera Pro-Fit', 550, 't-s1')">Añadir al Carrito</button>
+        <button class="btn-add" onclick="agregarAlCarrito('Sudadera Pro-Fit', 550, 't-s1', 'img-prod1')">Añadir al Carrito</button>
     </div>
 </div>
 
@@ -109,10 +110,11 @@
         evt.currentTarget.classList.add("active");
     }
 
-    function agregarAlCarrito(nombre, precio, idTalla) {
+    function agregarAlCarrito(nombre, precio, idTalla, idImg) {
         const talla = document.getElementById(idTalla).value;
+        const foto = document.getElementById(idImg).src; // Captura la URL de la imagen
         const idUnico = Date.now();
-        carrito.push({idUnico, nombre, precio, talla});
+        carrito.push({idUnico, nombre, precio, talla, foto});
         actualizarTotal();
         alert("✓ Agregado al carrito");
     }
@@ -139,7 +141,8 @@
             carrito.forEach((item) => {
                 lista.innerHTML += `
                     <div class="item-carrito">
-                        <div>
+                        <img src="${item.foto}" class="mini-foto">
+                        <div class="info-item">
                             <strong>${item.nombre}</strong><br>
                             <small>${item.talla} - $${item.precio}</small>
                         </div>
@@ -154,7 +157,7 @@
 
     function enviarWhatsApp() {
         if (carrito.length === 0) return alert("Agrega algo antes de comprar");
-        const tel = "5214961228531"; // <--- CAMBIA TU NÚMERO AQUÍ
+        const tel = "5214961228531"; // <--- LÍNEA 163 APROXIMADAMENTE
         let msg = "¡Hola! Quisiera realizar este pedido:\n\n";
         carrito.forEach((item, i) => msg += `${i+1}. ${item.nombre} (${item.talla}) - $${item.precio}\n`);
         msg += `\n*TOTAL: $${total}*`;

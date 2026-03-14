@@ -5,43 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo | Mi Tienda Deportiva</title>
     <style>
-        :root { --naranja: #ff4500; --gris-oscuro: #1a1a1a; }
-        body { background-color: #0d0d0d; color: #fff; font-family: 'Helvetica', sans-serif; margin: 0; padding-bottom: 100px; }
-        header { background: #000; padding: 25px; text-align: center; border-bottom: 2px solid var(--naranja); }
+        /* CONFIGURACIÓN DE COLORES */
+        :root { 
+            --primario: #000000; /* Negro para detalles */
+            --fondo: #ffffff;    /* Blanco para el fondo */
+            --gris-claro: #f4f4f4; 
+            --texto: #1a1a1a;
+        }
+
+        body { background-color: var(--fondo); color: var(--texto); font-family: 'Helvetica', sans-serif; margin: 0; padding-bottom: 100px; }
+        header { background: var(--primario); padding: 25px; text-align: center; color: #fff; }
         
-        /* Pestañas */
-        .categorias { display: flex; overflow-x: auto; background: var(--gris-oscuro); padding: 10px; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid #333; }
+        /* Menú de categorías */
+        .categorias { display: flex; overflow-x: auto; background: var(--fondo); padding: 10px; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid #ddd; }
         .tab-btn { background: none; border: none; color: #888; padding: 10px 20px; font-weight: bold; cursor: pointer; text-transform: uppercase; white-space: nowrap; }
-        .tab-btn.active { color: var(--naranja); border-bottom: 2px solid var(--naranja); }
+        .tab-btn.active { color: var(--primario); border-bottom: 2px solid var(--primario); }
 
         /* Productos */
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; padding: 20px; }
         .seccion-productos { display: none; }
         .seccion-productos.active { display: grid; }
-        .card { background: var(--gris-oscuro); border-radius: 8px; padding: 10px; border: 1px solid #333; }
         
-        /* Imagen con cursor de lupa */
-        .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 5px; cursor: zoom-in; transition: 0.3s; }
-        .card img:hover { opacity: 0.8; }
+        .card { background: #fff; border-radius: 8px; padding: 10px; border: 1px solid #eee; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 5px; cursor: zoom-in; }
         
-        .card h3 { font-size: 0.9rem; margin: 10px 0; height: 35px; overflow: hidden; }
-        select, .btn-add { width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: none; font-weight: bold; }
-        select { background: #333; color: #fff; margin-bottom: 10px; }
-        .btn-add { background: #fff; color: #000; cursor: pointer; }
-        .btn-add:hover { background: var(--naranja); color: #fff; }
+        select, .btn-add { width: 100%; padding: 10px; margin-top: 5px; border-radius: 4px; border: 1px solid #ddd; font-weight: bold; }
+        select { background: var(--gris-claro); color: #333; margin-bottom: 10px; }
+        .btn-add { background: var(--primario); color: #fff; cursor: pointer; border: none; }
+        .btn-add:hover { opacity: 0.8; }
 
-        /* MODAL DE IMAGEN (LUPA) */
-        #modal-imagen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 300; justify-content: center; align-items: center; cursor: zoom-out; }
-        #img-expandida { max-width: 95%; max-height: 90%; border-radius: 5px; box-shadow: 0 0 20px rgba(255,69,0,0.5); }
+        /* Lupa (Imagen expandida) */
+        #modal-imagen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); z-index: 300; justify-content: center; align-items: center; }
+        #img-expandida { max-width: 95%; max-height: 90%; border-radius: 5px; border: 2px solid var(--primario); box-shadow: 0 0 20px rgba(0,0,0,0.2); }
 
-        /* Barra Inferior */
-        .carrito-bar { position: fixed; bottom: 0; width: 100%; background: var(--naranja); color: white; padding: 15px; display: flex; justify-content: space-around; align-items: center; font-weight: bold; cursor: pointer; z-index: 100; border-radius: 15px 15px 0 0; }
-
-        /* VENTANA DEL CARRITO */
-        #modal-carrito { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 200; overflow-y: auto; }
-        .modal-contenido { background: var(--gris-oscuro); margin: 10% auto; padding: 20px; width: 90%; max-width: 500px; border-radius: 10px; border: 1px solid var(--naranja); }
-        .item-carrito { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #333; }
-        .btn-cerrar { background: #444; color: white; padding: 10px; width: 100%; margin-top: 10px; border: none; border-radius: 5px; }
+        /* Carrito */
+        .carrito-bar { position: fixed; bottom: 0; width: 100%; background: var(--primario); color: white; padding: 15px; display: flex; justify-content: space-around; align-items: center; font-weight: bold; cursor: pointer; z-index: 100; border-radius: 15px 15px 0 0; }
+        #modal-carrito { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 200; overflow-y: auto; }
+        .modal-contenido { background: #fff; margin: 10% auto; padding: 20px; width: 90%; max-width: 450px; border-radius: 10px; color: #000; }
+        
+        .item-carrito { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
+        .btn-eliminar { background: none; border: none; color: #ff4444; cursor: pointer; font-size: 1.2rem; }
+        
+        .btn-cerrar { background: #eee; color: #333; padding: 10px; width: 100%; margin-top: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
         .btn-whatsapp { background: #25d366; color: white; padding: 15px; width: 100%; margin-top: 20px; border: none; border-radius: 5px; font-weight: bold; font-size: 1rem; cursor: pointer; }
     </style>
 </head>
@@ -59,32 +64,30 @@
 
 <div id="sudaderas" class="seccion-productos active grid">
     <div class="card">
-        <img src="[url=https://postimg.cc/sBGH9VJH][img]https://i.postimg.cc/sBGH9VJH/sudadera-1.jpg[/img][/url]" alt="Sudadera" onclick="verImagen(this.src)">
+        <img src="[url=https://postimg.cc/sBGH9VJH][img]https://i.postimg.cc/sBGH9VJH/sudadera-1.jpg[/img][/url]" onclick="verImagen(this.src)">
         <h3>Sudadera Pro-Fit</h3>
-        <select id="talla-s1"><option>Talla: CH</option><option>Talla: M</option><option>Talla: G</option></select>
-        <span style="color:var(--naranja);">$550</span>
-        <button class="btn-add" onclick="agregarAlCarrito('Sudadera Pro-Fit', 550, 'talla-s1')">Agregar</button>
+        <select id="t-s1"><option>Talla: CH</option><option>Talla: M</option><option>Talla: G</option></select>
+        <span style="color:var(--primario); font-weight: bold; display: block; margin-bottom: 5px;">$550</span>
+        <button class="btn-add" onclick="agregarAlCarrito('Sudadera Pro-Fit', 550, 't-s1')">Añadir al Carrito</button>
     </div>
 </div>
 
-<div id="modal-imagen" onclick="this.style.display='none'">
-    <img id="img-expandida" src="" alt="Vista Previa">
-</div>
+<div id="modal-imagen" onclick="this.style.display='none'"><img id="img-expandida" src=""></div>
 
 <div id="modal-carrito">
     <div class="modal-contenido">
-        <h2>Tu Pedido</h2>
+        <h2 style="border-bottom: 2px solid #000; padding-bottom: 10px;">Resumen de Compra</h2>
         <div id="lista-carrito"></div>
         <hr>
-        <h3 id="total-modal">Total: $0</h3>
-        <button class="btn-whatsapp" onclick="enviarWhatsApp()">REALIZAR COMPRA (WhatsApp)</button>
-        <button class="btn-cerrar" onclick="cerrarCarrito()">Seguir comprando</button>
+        <h3 id="total-modal" style="text-align:right;">Total: $0</h3>
+        <button class="btn-whatsapp" onclick="enviarWhatsApp()">REALIZAR PEDIDO (WhatsApp)</button>
+        <button class="btn-cerrar" onclick="cerrarCarrito()">CERRAR</button>
     </div>
 </div>
 
 <div class="carrito-bar" onclick="abrirCarrito()">
     <span id="cuenta-carrito">Items: 0</span>
-    <span>REVISAR CARRITO</span>
+    <span>REVISAR MI CARRITO</span>
     <span id="total-bar">$0</span>
 </div>
 
@@ -92,7 +95,6 @@
     let carrito = [];
     let total = 0;
 
-    // Función para ver imagen en grande
     function verImagen(url) {
         document.getElementById("img-expandida").src = url;
         document.getElementById("modal-imagen").style.display = "flex";
@@ -109,42 +111,54 @@
 
     function agregarAlCarrito(nombre, precio, idTalla) {
         const talla = document.getElementById(idTalla).value;
-        carrito.push({nombre, precio, talla});
-        total += precio;
-        actualizarBarra();
-        alert("¡Agregado!");
+        const idUnico = Date.now();
+        carrito.push({idUnico, nombre, precio, talla});
+        actualizarTotal();
+        alert("✓ Agregado al carrito");
     }
 
-    function actualizarBarra() {
+    function eliminarDelCarrito(id) {
+        carrito = carrito.filter(item => item.idUnico !== id);
+        actualizarTotal();
+        abrirCarrito();
+    }
+
+    function actualizarTotal() {
+        total = carrito.reduce((sum, item) => sum + item.precio, 0);
         document.getElementById("cuenta-carrito").innerText = `Items: ${carrito.length}`;
         document.getElementById("total-bar").innerText = `$${total}`;
+        document.getElementById("total-modal").innerText = `Total: $${total}`;
     }
 
     function abrirCarrito() {
         const lista = document.getElementById("lista-carrito");
         lista.innerHTML = "";
-        carrito.forEach((item, index) => {
-            lista.innerHTML += `<div class="item-carrito">
-                <span>${item.nombre} (${item.talla})</span>
-                <span>$${item.precio}</span>
-            </div>`;
-        });
-        document.getElementById("total-modal").innerText = `Total: $${total}`;
+        if (carrito.length === 0) {
+            lista.innerHTML = "<p style='text-align:center; color:#999;'>El carrito está vacío</p>";
+        } else {
+            carrito.forEach((item) => {
+                lista.innerHTML += `
+                    <div class="item-carrito">
+                        <div>
+                            <strong>${item.nombre}</strong><br>
+                            <small>${item.talla} - $${item.precio}</small>
+                        </div>
+                        <button class="btn-eliminar" onclick="eliminarDelCarrito(${item.idUnico})">🗑️</button>
+                    </div>`;
+            });
+        }
         document.getElementById("modal-carrito").style.display = "block";
     }
 
-    function cerrarCarrito() {
-        document.getElementById("modal-carrito").style.display = "none";
-    }
+    function cerrarCarrito() { document.getElementById("modal-carrito").style.display = "none"; }
 
     function enviarWhatsApp() {
-        const tel = "5214961228531"; // <--- NO OLVIDES TU NÚMERO AQUÍ
-        let texto = "¡Hola! Quisiera realizar esta compra:\n\n";
-        carrito.forEach((item, i) => {
-            texto += `${i+1}. ${item.nombre} - ${item.talla} ($${item.precio})\n`;
-        });
-        texto += `\n*TOTAL: $${total}*`;
-        window.open(`https://wa.me/${tel}?text=${encodeURIComponent(texto)}`);
+        if (carrito.length === 0) return alert("Agrega algo antes de comprar");
+        const tel = "5214961228531"; // <--- CAMBIA TU NÚMERO AQUÍ
+        let msg = "¡Hola! Quisiera realizar este pedido:\n\n";
+        carrito.forEach((item, i) => msg += `${i+1}. ${item.nombre} (${item.talla}) - $${item.precio}\n`);
+        msg += `\n*TOTAL: $${total}*`;
+        window.open(`https://wa.me/${tel}?text=${encodeURIComponent(msg)}`);
     }
 </script>
 </body>
